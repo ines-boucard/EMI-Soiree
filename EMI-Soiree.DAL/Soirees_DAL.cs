@@ -36,7 +36,7 @@ namespace EMI_Soiree.DAL
                     //avec des paramètres si besoin
                     //SELECT SCOPE_IDENTITY() va renvoyer l'ID créé
 
-                    commande.CommandText = "insert into soirees (id, lieu, date) values (@id, @lieu, @date) ; SELECT SCOPE_IDENTITY()";
+                    commande.CommandText = "insert into soirees (id, lieu, date) values (@id, @lieu, @date)";
                     commande.Parameters.Add(new SqlParameter("@id", ID));
                     commande.Parameters.Add(new SqlParameter("@lieu", Lieu));
                     commande.Parameters.Add(new SqlParameter("@date", Date));
