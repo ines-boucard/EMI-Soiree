@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMI_Soiree.DAL
 {
-    class Prix_DAL
+    public class Prix_DAL
     {
         public int Montant { get; set; }
         public int IdParticipants { get; set; }

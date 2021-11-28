@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMI_Soiree.DAL
 {
-    class Soirees_DAL
+    public class Soirees_DAL
     {
         public int ID { get; set; }
         public List<Soirees_DAL> Participants { get; set; }
@@ -36,10 +36,8 @@ namespace EMI_Soiree.DAL
                     //avec des paramètres si besoin
                     //SELECT SCOPE_IDENTITY() va renvoyer l'ID créé
 
-                    commande.CommandText = "insert into soirees (id, lieu, date) values (@id, @lieu, @date)";
-                    commande.Parameters.Add(new SqlParameter("@id", ID));
+                    commande.CommandText = "insert into soirees (lieu, date) values (@lieu, getDate()); select scope_identity()";
                     commande.Parameters.Add(new SqlParameter("@lieu", Lieu));
-                    commande.Parameters.Add(new SqlParameter("@date", Date));
                     ID = (int)commande.ExecuteScalar();
 
 

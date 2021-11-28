@@ -34,8 +34,7 @@ namespace EMI_Soiree.DAL
                     //avec des paramètres si besoin
                     //SELECT SCOPE_IDENTITY() va renvoyer l'ID créé
 
-                    commande.CommandText = "insert into participants (id, nom, prenom, idSoiree) values (@id, @nom, @prenom, @idSoiree)";
-                    commande.Parameters.Add(new SqlParameter("@id", ID));
+                    commande.CommandText = "insert into participants (nom, prenom, idSoiree) values (@nom, @prenom, @idSoiree); select scope_identity()";
                     commande.Parameters.Add(new SqlParameter("@nom", Nom));
                     commande.Parameters.Add(new SqlParameter("@prenom", Prenom));
                     commande.Parameters.Add(new SqlParameter("@idFournisseurs", IdSoiree));
