@@ -16,7 +16,7 @@ namespace EMI_Soiree.DAL
         public Prix_DAL(int idSoiree, int idParticipants, int montant)
             => (IdSoiree, IdParticipants, Montant) = (idSoiree, idParticipants, montant);
 
-        public void Insert()
+        /*public void Insert()
         {
             var chaineConnexion = "Data Source=localhost;Initial Catalog=EMI-Soiree;Integrated Security=True";
 
@@ -45,6 +45,6 @@ namespace EMI_Soiree.DAL
                 //fermer la connexion
                 connexion.Close();
             }
-        }
+        }*/
     }
 }

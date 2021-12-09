@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMI_Soiree.DAL
 {
-    public abstract class Prix_Depot_DAL : Depot_DAL<Prix_DAL>
+    public class Prix_Depot_DAL : Depot_DAL<Prix_DAL>
     {
         public Prix_Depot_DAL()
            : base()
@@ -36,22 +36,80 @@ namespace EMI_Soiree.DAL
 
             return listeDePrix;
         }
-        public override Prix_DAL Insert(Prix_DAL participants)
+        public override Prix_DAL Insert(Prix_DAL prix)
         {
             CreerConnexionEtCommande();
 
             commande.CommandText = "insert into prix (idSoiree, idParticipants, montant)"
                                     + " values (@idSoiree, @idParticipants, @montant)";
-            commande.Parameters.Add(new SqlParameter("@idParticipants", participants.IdParticipants));
-            commande.Parameters.Add(new SqlParameter("@idSoiree", participants.IdSoiree));
-            commande.Parameters.Add(new SqlParameter("@montant", participants.Montant));
+            commande.Parameters.Add(new SqlParameter("@idParticipants", prix.IdParticipants));
+            commande.Parameters.Add(new SqlParameter("@idSoiree", prix.IdSoiree));
+            commande.Parameters.Add(new SqlParameter("@montant", prix.Montant));
 
 
             DetruireConnexionEtCommande();
 
-            return participants;
+            return prix;
+        }
+        public Prix_DAL GetByIdSoiree(int idSoiree)
+        {
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "select idSoiree, idParticipants, montant from prix where idSoiree=@idSoiree ";
+            commande.Parameters.Add(new SqlParameter("@idSoiree", idSoiree));
+            var reader = commande.ExecuteReader();
+
+            var prix = new List<Prix_DAL>();
+
+            Prix_DAL p;
+            if (reader.Read())
+            {
+                p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2));
+            }
+            else
+                throw new Exception($"Pas prix dans la BDD avec l'ID soiree  {idSoiree}");
+
+            DetruireConnexionEtCommande();
+
+            return p;
+        }
+        public Prix_DAL GetByIdParticipants(int idParticipants)
+        {
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "select idSoiree, idParticipants, montant from prix where idParticipants=@idParticipants ";
+            commande.Parameters.Add(new SqlParameter("@idParticipants", idParticipants));
+            var reader = commande.ExecuteReader();
+
+            var prix = new List<Prix_DAL>();
+
+            Prix_DAL p;
+            if (reader.Read())
+            {
+                p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2));
+            }
+            else
+                throw new Exception($"Pas prix dans la BDD avec l'ID participant  {idParticipants}");
+
+            DetruireConnexionEtCommande();
+
+            return p;
+        }
+        // pas de méthode update 
+        public override void Delete(Prix_DAL item)
+        {
+            throw new NotImplementedException();
         }
 
-        // pas de méthode update 
+        public override Prix_DAL GetByID(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Prix_DAL Update(Prix_DAL produits)
+        {
+            throw new NotImplementedException();
+        }
     }
+
 }

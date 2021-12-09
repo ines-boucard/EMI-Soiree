@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMI_Soiree.DAL
 {
-    public abstract class Soirees_Depot_DAL : Depot_DAL<Soirees_DAL>
+    public class Soirees_Depot_DAL : Depot_DAL<Soirees_DAL>
     {
         public Soirees_Depot_DAL()
            : base()
@@ -83,7 +83,40 @@ namespace EMI_Soiree.DAL
 
             return soirees;
         }
+        public override Soirees_DAL Update(Soirees_DAL soirees)
+        {
+            CreerConnexionEtCommande();
 
+            commande.CommandText = "update soirees set lieu = @lieu, date = @date where id=@id";
+            commande.Parameters.Add(new SqlParameter("@lieu", soirees.Lieu));
+            commande.Parameters.Add(new SqlParameter("@date", soirees.Date));
+     
+            var nombreDeLignesAffectees = (int)commande.ExecuteNonQuery();
+
+            if (nombreDeLignesAffectees != 1)
+            {
+                throw new Exception($"Impossible de mettre à jour la soiree avec l'ID  {soirees.ID}");
+            }
+
+            DetruireConnexionEtCommande();
+
+            return soirees;
+        }
+        public override void Delete(Soirees_DAL soirees)
+        {
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "delete from soirees where id = @id";
+            commande.Parameters.Add(new SqlParameter("@id", soirees.ID));
+            var nombreDeLignesAffectees = (int)commande.ExecuteNonQuery();
+
+            if (nombreDeLignesAffectees != 1)
+            {
+                throw new Exception($"Impossible de supprimer la soirees avec l'ID {soirees.ID}");
+            }
+
+            DetruireConnexionEtCommande();
+        }
 
     }
 }
