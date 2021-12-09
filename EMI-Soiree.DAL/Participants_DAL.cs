@@ -12,9 +12,11 @@ namespace EMI_Soiree.DAL
         public String Prenom { get; set; }
         public int IdSoiree { get; set; }
 
+        public Participants_DAL(String nom, String prenom, int idSoiree)
+            => (Nom, Prenom, IdSoiree) = (nom, prenom, idSoiree);
         public Participants_DAL(int id, String nom, String prenom, int idSoiree)
             => (ID, Nom, Prenom, IdSoiree) = (id, nom, prenom, idSoiree);
-        public void Insert()
+        /*public void Insert()
         {
             var chaineConnexion = "Data Source=localhost;Initial Catalog=EMI-Soiree;Integrated Security=True";
 
@@ -48,7 +50,7 @@ namespace EMI_Soiree.DAL
                 connexion.Close();
             }
 
-        }
+        }*/
     }
 }
 

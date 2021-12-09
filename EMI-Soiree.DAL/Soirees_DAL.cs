@@ -14,9 +14,11 @@ namespace EMI_Soiree.DAL
         public String Lieu { get; set; }
         public DateTime? Date { get; set; }
 
+        public Soirees_DAL(String lieu, DateTime? date)
+            => (Lieu, Date) = (lieu, date);
         public Soirees_DAL(int id, String lieu, DateTime? date)
             => (ID, Lieu, Date) = (id, lieu, date);
-        public void Insert()
+       /* public void Insert()
         {
             var chaineConnexion = "Data Source=localhost;Initial Catalog=EMI-Soiree;Integrated Security=True";
 
@@ -48,7 +50,7 @@ namespace EMI_Soiree.DAL
                 connexion.Close();
             }
 
-        }
+        }*/
 
     }
 }
