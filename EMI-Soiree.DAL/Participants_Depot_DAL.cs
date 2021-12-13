@@ -27,7 +27,7 @@ namespace EMI_Soiree.DAL
             while (reader.Read())
             {
                 //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = ID, 1 = Societe...
-                var participants = new Participants_DAL(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(1));
+                var participants = new Participants_DAL(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3));
 
                 listeDeParticipants.Add(participants);
             }
@@ -40,11 +40,11 @@ namespace EMI_Soiree.DAL
         {
             CreerConnexionEtCommande(); 
 
-            commande.CommandText = "select id, nom, CiviliteContact, prenom, idSoiree from participants";
+            commande.CommandText = "select id, nom, prenom, idSoiree from participants where id=@id";
             commande.Parameters.Add(new SqlParameter("@id", ID));
             var reader = commande.ExecuteReader();
 
-            var listeDeFournisseurs = new List<Participants_DAL>();
+            var listeDeParticipants = new List<Participants_DAL>();
 
             Participants_DAL participants;
             if (reader.Read())
@@ -52,7 +52,7 @@ namespace EMI_Soiree.DAL
                 participants = new Participants_DAL(reader.GetInt32(0),
                                         reader.GetString(1),
                                         reader.GetString(2),
-                                        reader.GetInt32(2));
+                                        reader.GetInt32(3));
             }
             else
                 throw new Exception($"Pas de participant dans la BDD avec l'ID {ID}");
@@ -60,7 +60,8 @@ namespace EMI_Soiree.DAL
             DetruireConnexionEtCommande();
 
             return participants;
-            }
+        }
+
         public override Participants_DAL Insert(Participants_DAL participants)
         {
             CreerConnexionEtCommande();
@@ -83,8 +84,8 @@ namespace EMI_Soiree.DAL
         {
             CreerConnexionEtCommande();
 
-            commande.CommandText = "update participants set id = @id, nom = @nom, prenom = @prenom, idSoiree = @idSoiree )"
-                                    + " where idFournisseurs=@idFournisseurs";
+            commande.CommandText = "update participants set nom = @nom, prenom = @prenom, idSoiree = @idSoiree "
+                                    + " where id=@id";
             commande.Parameters.Add(new SqlParameter("@id", participants.ID));
             commande.Parameters.Add(new SqlParameter("@nom", participants.Nom));
             commande.Parameters.Add(new SqlParameter("@prenom", participants.Prenom));
