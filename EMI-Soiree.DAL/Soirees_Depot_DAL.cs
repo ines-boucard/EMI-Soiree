@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMI_Soiree.DAL
 {
-    public abstract class Soirees_Depot_DAL : Depot_DAL<Soirees_DAL>
+    public class Soirees_Depot_DAL : Depot_DAL<Soirees_DAL>
     {
         public Soirees_Depot_DAL()
            : base()
@@ -26,11 +26,10 @@ namespace EMI_Soiree.DAL
             var listeDeSoirees = new List<Soirees_DAL>();
 
             while (reader.Read())
-            {
-                //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = idFournisseurs, 1 = societe...
+            { 
                 var soirees = new Soirees_DAL(reader.GetInt32(0),
                                                         reader.GetString(1),
-                                                        reader.GetSqlDateTime(2).IsNull ? null : reader.GetDateTime(2));
+                                                        reader.GetDateTime(2));
 
 
                 listeDeSoirees.Add(soirees);
@@ -49,21 +48,21 @@ namespace EMI_Soiree.DAL
             commande.Parameters.Add(new SqlParameter("@id", ID));
             var reader = commande.ExecuteReader();
 
-            var listeDeFournisseurs = new List<Soirees_DAL>();
+            var listeDeSoirees = new List<Soirees_DAL>();
 
-            Soirees_DAL fournisseur;
+            Soirees_DAL soiree;
             if (reader.Read())
             {
-                fournisseur = new Soirees_DAL(reader.GetInt32(0),
+                soiree = new Soirees_DAL(reader.GetInt32(0),
                                                         reader.GetString(1),
-                                                        reader.GetSqlDateTime(2).IsNull ? null : reader.GetDateTime(2));
+                                                        reader.GetDateTime(2));
             }
             else
                 throw new Exception($"Pas de soiree dans la BDD avec l'ID {ID}");
 
             DetruireConnexionEtCommande();
 
-            return fournisseur;
+            return soiree;
         }
 
         public override Soirees_DAL Insert(Soirees_DAL soirees)
@@ -82,6 +81,41 @@ namespace EMI_Soiree.DAL
             DetruireConnexionEtCommande();
 
             return soirees;
+        }
+
+        public override Soirees_DAL Update(Soirees_DAL soiree)
+        {
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "update soirees set lieu = @lieu where id=@id";
+            commande.Parameters.Add(new SqlParameter("@ID", soiree.ID));
+            commande.Parameters.Add(new SqlParameter("@lieu", soiree.Lieu));
+            var nombreDeLignesAffectees = (int)commande.ExecuteNonQuery();
+
+            if (nombreDeLignesAffectees != 1)
+            {
+                throw new Exception($"Impossible de mettre à jour la soirée avec l'ID  {soiree.ID}");
+            }
+
+            DetruireConnexionEtCommande();
+
+            return soiree;
+        }
+
+        public override void Delete(Soirees_DAL soiree)
+        {
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "delete from soirees where id=@id";
+            commande.Parameters.Add(new SqlParameter("@id", soiree.ID));
+            var nombreDeLignesAffectees = (int)commande.ExecuteNonQuery();
+
+            if (nombreDeLignesAffectees != 1)
+            {
+                throw new Exception($"Impossible de supprimer l'adherent avec l'ID {soiree.ID}");
+            }
+
+            DetruireConnexionEtCommande();
         }
 
 
