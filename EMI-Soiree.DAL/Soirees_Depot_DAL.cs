@@ -82,7 +82,7 @@ namespace EMI_Soiree.DAL
 
             return soirees;
         }
-
+       
         public override Soirees_DAL Update(Soirees_DAL soiree)
         {
             CreerConnexionEtCommande();
@@ -112,12 +112,11 @@ namespace EMI_Soiree.DAL
 
             if (nombreDeLignesAffectees != 1)
             {
-                throw new Exception($"Impossible de supprimer l'adherent avec l'ID {soiree.ID}");
+                throw new Exception($"Impossible de supprimer la soirée avec l'ID {soiree.ID}");
             }
 
             DetruireConnexionEtCommande();
         }
-
 
     }
 }

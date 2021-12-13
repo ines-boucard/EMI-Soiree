@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMI_Soiree.DAL
 {
-    public abstract class Participants_Depot_DAL : Depot_DAL<Participants_DAL>
+    public class Participants_Depot_DAL : Depot_DAL<Participants_DAL>
     {
         public Participants_Depot_DAL()
             : base()
