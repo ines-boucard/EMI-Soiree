@@ -17,7 +17,6 @@ namespace EMI_Soiree.DAL
 
         public Depot_DAL()
         {
-            // pour lire la config, on a besoin d'un objet, le "ConfigurationBuilder"
             var builder = new ConfigurationBuilder();
             var config = builder.AddJsonFile("appsettings.json", true, true).Build();
 
@@ -53,4 +52,4 @@ namespace EMI_Soiree.DAL
         #endregion
     }
 }
-}
+
