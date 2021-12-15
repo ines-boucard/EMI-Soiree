@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>EMI_SoireeConsole</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EMI-Soiree.DAL\EMI-Soiree.DAL.csproj" />
+    <ProjectReference Include="..\EMI-Soiree\EMI-Soiree.csproj" />
+  </ItemGroup>
+
+</Project>
