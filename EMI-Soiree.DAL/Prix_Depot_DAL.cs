@@ -46,6 +46,7 @@ namespace EMI_Soiree.DAL
             commande.Parameters.Add(new SqlParameter("@idSoiree", prix.IdSoiree));
             commande.Parameters.Add(new SqlParameter("@montant", prix.Montant));
 
+            commande.ExecuteNonQuery();
 
             DetruireConnexionEtCommande();
 
