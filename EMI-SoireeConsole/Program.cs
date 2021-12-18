@@ -10,19 +10,7 @@ namespace EMI_SoireeConsole
         
         static void Main(string[] args)
         {
-            void ListeDeSoirees()
-        {
-            var soireesService = new SoireesService();
-            Console.WriteLine("Participants");
-            Console.WriteLine("Lieu      Date");
-            for (int i = 0; i < soireesService.GetAll().Count(); i++)
-            {
-
-                Console.WriteLine("| " + soireesService.GetAll()[i].Lieu + "  |   " + soireesService.GetAll()[i].Date);
-
-            }
-
-        }
+            
             void ListeDeParticipants()
             {
                 var participantsService = new SParticipantsService();
@@ -77,32 +65,38 @@ namespace EMI_SoireeConsole
             }
             void Menu()
             {
-                Console.WriteLine("\nChoissiez un nombre : \n 1 - voir les participants\n 2 - voir les soirees\n 3 - rentrer une soiree" );
+                Console.WriteLine("\n Bienvenu dans EMI-Soiree !");
+                Console.WriteLine("\n Que souhaitez-vous faire ? \n 1 - Voir les soirees \n 2 - Rentrer une nouvelle soiree \n 3 - Quitter l'application" );
                 int choix1 = Int32.Parse(Console.ReadLine());
                  if(choix1 == 1)
                 {
-                    ListeDeParticipants();
-                    Menu();
+                    Console.WriteLine("Voici la liste de vos soiree enregistrees :");
+                    GestionSoiree.ListeDeSoirees();
+                    Console.WriteLine("\n Choisisser la soiree a laquelle vous souhaiter acceder \n ou bien taper 0 pour revenir au menu");
+                    int choix2 = Int32.Parse(Console.ReadLine());
+                    if (choix2 == 0)
+                    {
+                        Menu();
+                    } 
+                    else
+                    {
+                        GestionSoiree.AccederAuneSoiree(choix2);
+                    }
+                    
                 }
                  if(choix1 == 2)
-                {
-                    ListeDeSoirees();
-                    Menu();
-                }
-                 if(choix1 == 3)
                 {
                     RentrerSoirees();
                     Menu();
                 }
+                 if(choix1 == 3)
+                {
+                    //sortie 
 
-
+                }
 
             }
-            void helllo()
-            {
-                Console.WriteLine("Hello World!");
-            }
-            helllo();
+            
             Menu();
 
             /*var s1DAL = new Soirees_DAL("warehouse");
