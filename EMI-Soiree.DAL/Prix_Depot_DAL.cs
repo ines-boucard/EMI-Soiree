@@ -114,9 +114,27 @@ namespace EMI_Soiree.DAL
             throw new NotImplementedException();
         }
 
-        public override Prix_DAL Update(Prix_DAL produits)
+        public override Prix_DAL Update(Prix_DAL prix)
         {
-            throw new NotImplementedException();
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "update prix set montant=@montant where idParticipants=@idParticipants and idSoiree=@idSoiree";
+            commande.Parameters.Add(new SqlParameter("@idParticipant", prix.IdParticipants));
+            commande.Parameters.Add(new SqlParameter("@idSoiree", prix.IdSoiree));
+            commande.Parameters.Add(new SqlParameter("@montant", prix.Montant));
+
+            var nbLignes = (int)commande.ExecuteNonQuery();
+
+            if (nbLignes != 1)
+            {
+                throw new Exception($"Impossible de mettre à jour le prix correspondant a la soire {prix.IdSoiree} et au participant {prix.IdParticipants} ");
+            }
+
+            prix.Montant = GetByID(prix.IdParticipants).Montant;
+
+            DetruireConnexionEtCommande();
+
+            return prix;
         }
     }
 
