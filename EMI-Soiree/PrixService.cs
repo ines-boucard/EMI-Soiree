@@ -21,14 +21,17 @@ namespace EMI_Soiree
 
             return prix;
         }
-        public Prix GetByIdSoiree(int idsoiree)
+        public List<Prix> GetByIdSoiree(int idsoiree)
         {
-            var p = depot.GetByID(idsoiree);
 
-            return new Prix(p.IdSoiree,
-                            p.IdParticipants,
-                            p.Montant
-                              );
+            var prix = depot.GetByIdSoiree(idsoiree)
+                .Select(p => new Prix(p.IdSoiree,
+                                      p.IdParticipants,
+                                      p.Montant
+                                        ))
+                .ToList();
+            return prix;
+            
 
         }
         public Prix GetByIdParticipants(int idParticipant)
