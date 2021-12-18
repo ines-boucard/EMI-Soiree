@@ -9,7 +9,7 @@ namespace EMI_Soiree
     public interface IPrixService
     {
         public List<Prix> GetAll();
-        public Prix GetByIdSoiree(int IdSoiree);
+        public List<Prix> GetByIdSoiree(int IdSoiree);
         public Prix GetByIdParticipants(int IdParticipants);
         public Prix Insert(Prix p);
         

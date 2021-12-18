@@ -52,7 +52,7 @@ namespace EMI_Soiree.DAL
 
             return prix;
         }
-        public Prix_DAL GetByIdSoiree(int idSoiree)
+        public List<Prix_DAL> GetByIdSoiree(int idSoiree)
         {
             CreerConnexionEtCommande();
 
@@ -60,19 +60,26 @@ namespace EMI_Soiree.DAL
             commande.Parameters.Add(new SqlParameter("@idSoiree", idSoiree));
             var reader = commande.ExecuteReader();
 
-            var prix = new List<Prix_DAL>();
+            var listeDePrix = new List<Prix_DAL>();
 
-            Prix_DAL p;
-            if (reader.Read())
+
+            while (reader.Read())
             {
-                p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2));
+                //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = ID, 1 = Societe...
+                var p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2));
+
+                listeDePrix.Add(p);
             }
-            else
+       
+            /*if (reader.Read() == false)
+            {
                 throw new Exception($"Pas prix dans la BDD avec l'ID soiree  {idSoiree}");
 
-            DetruireConnexionEtCommande();
+            }*/
+          
 
-            return p;
+            return listeDePrix; 
+            
         }
         public Prix_DAL GetByIdParticipants(int idParticipants)
         {
