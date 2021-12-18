@@ -52,6 +52,16 @@ namespace EMI_Soiree
 
             return p;
         }
-        
+
+        public Prix Update(Prix p)
+        {
+            var prix = new Prix_DAL(p.IdParticipants,
+                                    p.IdSoiree,
+                                    p.Montant);
+            depot.Update(prix);
+
+            return p;
+        }
+
     }
 }

@@ -62,6 +62,35 @@ namespace EMI_Soiree.DAL
             return participants;
         }
 
+        public List<Participants_DAL> GetByIdSoiree(int IdSoiree)
+        {
+            CreerConnexionEtCommande();
+
+            commande.CommandText = "select id, nom, prenom, idSoiree from participants where idSoiree=@idSoiree";
+            commande.Parameters.Add(new SqlParameter("@idSoiree", IdSoiree));
+            var reader = commande.ExecuteReader();
+
+            var listeDeParticipants = new List<Participants_DAL>();
+
+            
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = ID, 1 = Societe...
+                    var participants = new Participants_DAL(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3));
+
+                    listeDeParticipants.Add(participants);
+                }
+            }
+            else
+                throw new Exception($"Pas de participant dans la BDD avec l'ID de la soiree {IdSoiree}");
+
+            DetruireConnexionEtCommande();
+
+            return listeDeParticipants;
+        }
+
         public override Participants_DAL Insert(Participants_DAL participants)
         {
             CreerConnexionEtCommande();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EMI_Soiree
 {
-    public class SParticipantsService : IParticipantsService
+    public class ParticipantsService : IParticipantsService
     {
         private Participants_Depot_DAL depot = new Participants_Depot_DAL();
         public List<Participants> GetAll()
@@ -33,6 +33,20 @@ namespace EMI_Soiree
                               );
 
         }
+
+        public  List<Participants> GetByIdSoiree(int idSoiree)
+        {
+            var participant = depot.GetByIdSoiree(idSoiree)
+                .Select(p => new Participants(p.ID,
+                                        p.Nom,
+                                        p.Prenom,
+                                        p.IdSoiree
+                                        ))
+                .ToList();
+
+            return participant;
+        }
+
         public Participants Insert(Participants p)
         {
             var participants = new Participants_DAL(p.ID,
