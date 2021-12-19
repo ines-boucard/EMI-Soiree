@@ -26,8 +26,9 @@ namespace EMI_Soiree.DAL
 
             while (reader.Read())
             {
-                //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = ID, 1 = Societe...
+
                 var prix = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(3));
+
 
                 listeDePrix.Add(prix);
             }
@@ -81,7 +82,7 @@ namespace EMI_Soiree.DAL
             return listeDePrix; 
             
         }
-        public Prix_DAL GetByIdParticipants(int idParticipants)
+        public List<Prix_DAL> GetByIdParticipants(int idParticipants)
         {
             CreerConnexionEtCommande();
 
@@ -89,21 +90,19 @@ namespace EMI_Soiree.DAL
             commande.Parameters.Add(new SqlParameter("@idParticipants", idParticipants));
             var reader = commande.ExecuteReader();
 
-            var prix = new List<Prix_DAL>();
+            var listeDePrix = new List<Prix_DAL>();
 
-            Prix_DAL p;
-            if (reader.Read())
+            
+            while(reader.Read())
             {
                 p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(2));
+                listeDePrix.Add(p);
+
             }
-            else
-                throw new Exception($"Pas prix dans la BDD avec l'ID participant  {idParticipants}");
+            
 
-            DetruireConnexionEtCommande();
-
-            return p;
+            return listeDePrix;
         }
-        // pas de méthode update 
         public override void Delete(Prix_DAL item)
         {
             throw new NotImplementedException();
@@ -118,8 +117,10 @@ namespace EMI_Soiree.DAL
         {
             CreerConnexionEtCommande();
 
+
             commande.CommandText = "update prix set montant=@montant where idParticipants=@idParticipant and idSoiree=@idSoiree";
             commande.Parameters.Add(new SqlParameter("@idParticipant", prix.IdParticipants));
+
             commande.Parameters.Add(new SqlParameter("@idSoiree", prix.IdSoiree));
             commande.Parameters.Add(new SqlParameter("@montant", prix.Montant));
 

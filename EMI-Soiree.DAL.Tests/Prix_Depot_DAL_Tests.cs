@@ -32,7 +32,7 @@ namespace EMI_Soiree.DAL.Tests
         {
             var depot = new Prix_Depot_DAL();
 
-            var prix = depot.GetByIdParticipants(1);
+            var prix = depot.GetByIdParticipants(1)[0];
 
             Assert.NotNull(prix);
             Assert.Equal(1, prix.IdParticipants);
@@ -52,6 +52,21 @@ namespace EMI_Soiree.DAL.Tests
             Assert.NotNull(prix);
             //on vérifie si on a un lieu 
             //Assert.NotNull(prix.IdParticipants);
+        }
+        [Fact]
+        public void Prix_Depot_DAL_TesterUpdate()
+        {
+
+            var prix = new Prix_DAL(2, 2, 20);
+
+            var depot = new Prix_Depot_DAL();
+
+            depot.Insert(prix);
+            depot.Update(prix);
+
+            Assert.NotNull(prix);
+            //on vérifie si on a un lieu 
+            Assert.NotNull(prix.IdParticipants);
         }
 
     }
