@@ -34,7 +34,7 @@ namespace EMI_SoireeConsole
             int choix1 = Int32.Parse(Console.ReadLine());
             if (choix1 == 1)
             {
-                //GestionRemboursements.CalculerRemboursement(choixSoiree);
+                GestionRemboursements.CalculerRemboursement(choixSoiree);
             }
             else if (choix1 == 2)
             {

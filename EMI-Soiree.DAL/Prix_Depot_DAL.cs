@@ -26,8 +26,9 @@ namespace EMI_Soiree.DAL
 
             while (reader.Read())
             {
-                //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = ID, 1 = Societe...
-                var prix = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2));
+
+                var prix = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(3));
+
 
                 listeDePrix.Add(prix);
             }
@@ -66,7 +67,7 @@ namespace EMI_Soiree.DAL
             while (reader.Read())
             {
                 //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = ID, 1 = Societe...
-                var p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2));
+                var p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(2));
 
                 listeDePrix.Add(p);
             }
@@ -94,20 +95,14 @@ namespace EMI_Soiree.DAL
             
             while(reader.Read())
             {
-                //dans reader.GetInt32 on met la colonne que l'on souhaite récupérer ici 0 = ID, 1 = Societe...
-                var p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2));
-
+                p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(2));
                 listeDePrix.Add(p);
-            }
-            /*
-            else
-                throw new Exception($"Pas prix dans la BDD avec l'ID participant  {idParticipants}");
 
-            DetruireConnexionEtCommande();*/
+            }
+            
 
             return listeDePrix;
         }
-        // pas de méthode update 
         public override void Delete(Prix_DAL item)
         {
             throw new NotImplementedException();
@@ -122,8 +117,10 @@ namespace EMI_Soiree.DAL
         {
             CreerConnexionEtCommande();
 
-            commande.CommandText = "update prix set montant=@montant where idParticipants=@idParticipants and idSoiree=@idSoiree";
-            commande.Parameters.Add(new SqlParameter("@idParticipants", prix.IdParticipants));
+
+            commande.CommandText = "update prix set montant=@montant where idParticipants=@idParticipant and idSoiree=@idSoiree";
+            commande.Parameters.Add(new SqlParameter("@idParticipant", prix.IdParticipants));
+
             commande.Parameters.Add(new SqlParameter("@idSoiree", prix.IdSoiree));
             commande.Parameters.Add(new SqlParameter("@montant", prix.Montant));
 
@@ -134,7 +131,7 @@ namespace EMI_Soiree.DAL
                 throw new Exception($"Impossible de mettre à jour le prix correspondant a la soire {prix.IdSoiree} et au participant {prix.IdParticipants} ");
             }
 
-            prix.Montant = GetByID(prix.IdParticipants).Montant;
+            prix.Montant = GetByIdParticipants(prix.IdParticipants).Montant;
 
             DetruireConnexionEtCommande();
 

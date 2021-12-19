@@ -9,11 +9,11 @@ namespace EMI_Soiree.DAL
 {
     public class Prix_DAL
     {
-        public int Montant { get; set; }
+        public double Montant { get; set; }
         public int IdParticipants { get; set; }
         public int IdSoiree { get; set; }
 
-        public Prix_DAL(int idSoiree, int idParticipants, int montant)
+        public Prix_DAL(int idSoiree, int idParticipants, double montant)
             => (IdSoiree, IdParticipants, Montant) = (idSoiree, idParticipants, montant);
 
     }

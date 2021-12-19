@@ -13,97 +13,103 @@ namespace EMI_SoireeConsole
         public static void CalculerRemboursement(int choixSoiree)
         {
 
-            var prixServices = new PrixService();
-            int montantGlobale = 0;
-            var DoisRembourser = new List<Prix>();
-            var DoisEtreRembourser = new List<Prix>();
+            var prix = new PrixService();
+            var participant = new ParticipantsService();
+            double montantGlobal = 0;
+            var DoitRembourser = new List<Prix>();
+            var DoitEtreRembourser = new List<Prix>();
 
-            for (int i = 0; i < prixServices.GetByIdSoiree(choixSoiree).Count; i++)
+            if (participant.GetByIdSoiree(choixSoiree).Count() <2)
             {
-                montantGlobale = montantGlobale + prixServices.GetByIdSoiree(choixSoiree)[i].Montant;
+                Console.WriteLine("Cette soirée ne contient pas assez de participants pour faire le calcul");
             }
-
-            int montantMoyenneParPersonne = montantGlobale / prixServices.GetByIdSoiree(choixSoiree).Count;
-            
-            for (int i = 0; i < prixServices.GetByIdSoiree(choixSoiree).Count; i++)
+            else
             {
-
-                if (prixServices.GetByIdSoiree(choixSoiree)[i].Montant <= montantMoyenneParPersonne)
+                for (int i = 0; i < prix.GetByIdSoiree(choixSoiree).Count; i++)
                 {
-                    DoisRembourser.Add(prixServices.GetByIdSoiree(choixSoiree)[i]);
+                    montantGlobal = montantGlobal + prix.GetByIdSoiree(choixSoiree)[i].Montant;
                 }
-                else
-                {
-                    DoisEtreRembourser.Add(prixServices.GetByIdSoiree(choixSoiree)[i]);
-                }
-            }
 
-            for (int i = 0; i < DoisEtreRembourser.Count; i++)
-            {
+                double montantMoyenneParPersonne = montantGlobal / prix.GetByIdSoiree(choixSoiree).Count;
 
-                var personneDoitEtreRemourser = DoisEtreRembourser[i];
-                // on calcul le montant dont la personne doit être remboursée 
-                int montantReceveur = personneDoitEtreRemourser.Montant - montantMoyenneParPersonne;
-                Console.WriteLine("le participant" + personneDoitEtreRemourser.IdParticipants + "doit etre rembourser de " + montantReceveur);
-
-                // Si cette personne a déja été remboursé elle n'a pas besoin d'etre remboursée 
-                if (personneDoitEtreRemourser.Montant == montantMoyenneParPersonne)
-                {
-                    Console.WriteLine("Cette personne a le bon compte");
-                }
-                else
+                for (int i = 0; i < prix.GetByIdSoiree(choixSoiree).Count; i++)
                 {
 
-                    for (int j = 0; j < DoisRembourser.Count; j++)
+                    if (prix.GetByIdSoiree(choixSoiree)[i].Montant <= montantMoyenneParPersonne)
                     {
-                        var personneDoisRemourser = DoisRembourser[j];
-                        // on calcul le montant que la personne doit donner 
-                        int montantDonneur = montantMoyenneParPersonne - personneDoisRemourser.Montant;
-                       
-                        // Si cette personne a déja été remboursé elle n'a pas besoin d'etre remboursée 
-                        if (personneDoisRemourser.Montant == montantMoyenneParPersonne)
+                        DoitRembourser.Add(prix.GetByIdSoiree(choixSoiree)[i]);
+                    }
+                    else
+                    {
+                        DoitEtreRembourser.Add(prix.GetByIdSoiree(choixSoiree)[i]);
+                    }
+                }
+
+                for (int i = 0; i < DoitEtreRembourser.Count; i++)
+                {
+
+                    var personneDoitEtreRembourser = DoitEtreRembourser[i];
+                    // on calcul le montant dont la personne doit être remboursée 
+                    double montantReceveur = personneDoitEtreRembourser.Montant - montantMoyenneParPersonne;
+  
+                    // Si cette personne a déja été remboursé elle n'a pas besoin d'etre remboursée 
+                    if (personneDoitEtreRembourser.Montant == montantMoyenneParPersonne)
+                    {
+                        Console.WriteLine("Cette personne a le bon compte");
+                    }
+                    else
+                    {
+
+                        for (int j = 0; j < DoitRembourser.Count; j++)
                         {
-                            Console.WriteLine("Cette personne a le bon compte");
-                        }
-                        else
-                        {
+                            var personneDoitRembourser = DoitRembourser[j];
+                            // on calcul le montant que la personne doit donner 
+                            double montantDonneur = montantMoyenneParPersonne - personneDoitRembourser.Montant;
 
-                            int remboursementFait;
-                            // Le cas où le montant que la personne doit payer est plus petit que celui qu'elle doit donner
-                            // ex donneur doit donner 5 euros mais le receveur doit recevoir 10 euros
-                            if (montantReceveur > montantDonneur)
+                            // Si cette personne a déja été remboursé elle n'a pas besoin d'etre remboursée 
+                            if (personneDoitRembourser.Montant == montantMoyenneParPersonne)
                             {
-
-                                personneDoitEtreRemourser.Montant = personneDoitEtreRemourser.Montant - montantDonneur;
-                                personneDoisRemourser.Montant = personneDoisRemourser.Montant + montantDonneur;
-                                Console.WriteLine("le participants " + personneDoisRemourser.IdParticipants + " dois " + montantDonneur + " au participants" + personneDoitEtreRemourser.IdParticipants);
-                                montantReceveur = personneDoitEtreRemourser.Montant - montantMoyenneParPersonne;
-                                montantDonneur = montantMoyenneParPersonne - personneDoisRemourser.Montant;
-
+                                Console.WriteLine("Cette personne a le bon compte");
                             }
-                            // Le cas où le montant que la personne doit payer est plus grand que celui qu'elle doit donner
-                            // ex donneur doit donner 10 euros mais le receveur doit recevoir 5 euros
-
-                            if (montantReceveur < montantDonneur)
+                            else
                             {
+                                // Le cas où le montant que la personne doit payer est plus petit que celui qu'elle doit donner
+                                // ex donneur doit donner 5 euros mais le receveur doit recevoir 10 euros
+                                if (montantReceveur > montantDonneur)
+                                {
+
+                                    personneDoitEtreRembourser.Montant = personneDoitEtreRembourser.Montant - montantDonneur;
+                                    personneDoitRembourser.Montant = personneDoitRembourser.Montant + montantDonneur;
+                                    Console.WriteLine(participant.GetByID(personneDoitRembourser.IdParticipants).Prenom + " doit " + String.Format("{0:0.00}", montantDonneur) + " a " + participant.GetByID(personneDoitEtreRembourser.IdParticipants).Prenom);
+                                    montantReceveur = personneDoitEtreRembourser.Montant - montantMoyenneParPersonne;
+                                    montantDonneur = montantMoyenneParPersonne - personneDoitRembourser.Montant;
+
+                                }
+                                // Le cas où le montant que la personne doit payer est plus grand que celui qu'elle doit donner
+                                // ex donneur doit donner 10 euros mais le receveur doit recevoir 5 euros
+
+                                if (montantReceveur < montantDonneur)
+                                {
 
 
-                                personneDoitEtreRemourser.Montant = personneDoitEtreRemourser.Montant - montantReceveur;
-                                personneDoisRemourser.Montant = personneDoisRemourser.Montant + montantReceveur;
-                                Console.WriteLine("le participants " + personneDoisRemourser.IdParticipants + " dois " + montantReceveur + " au participants" + personneDoitEtreRemourser.IdParticipants);
-                                montantReceveur = personneDoitEtreRemourser.Montant - montantMoyenneParPersonne;
-                                montantDonneur = montantMoyenneParPersonne - personneDoisRemourser.Montant;
-                            }
-                            // Le cas où le montant que la personne doit payer est plus égale à celui qu'elle doit donner
-                            // ex donneur doit donner 10 euros mais le receveur doit recevoir 10 euros
-                            if (montantReceveur == montantDonneur)
-                            {
+                                    personneDoitEtreRembourser.Montant = personneDoitEtreRembourser.Montant - montantReceveur;
+                                    personneDoitRembourser.Montant = personneDoitRembourser.Montant + montantReceveur;
+                                    Console.WriteLine(participant.GetByID(personneDoitRembourser.IdParticipants).Prenom + " doit " + String.Format("{0:0.00}", montantReceveur) + " a " + participant.GetByID(personneDoitEtreRembourser.IdParticipants).Prenom);
+                                    montantReceveur = personneDoitEtreRembourser.Montant - montantMoyenneParPersonne;
+                                    montantDonneur = montantMoyenneParPersonne - personneDoitRembourser.Montant;
+                                }
+                                // Le cas où le montant que la personne doit payer est plus égale à celui qu'elle doit donner
+                                // ex donneur doit donner 10 euros mais le receveur doit recevoir 10 euros
+                                if (montantReceveur == montantDonneur)
+                                {
 
-                                personneDoitEtreRemourser.Montant = personneDoitEtreRemourser.Montant - montantReceveur;
-                                personneDoisRemourser.Montant = personneDoisRemourser.Montant + montantReceveur;
-                                Console.WriteLine("le participants " + personneDoisRemourser.IdParticipants + " dois " + montantReceveur + " au participants" + personneDoitEtreRemourser.IdParticipants);
-                                montantReceveur = personneDoitEtreRemourser.Montant - montantMoyenneParPersonne;
-                                montantDonneur = montantMoyenneParPersonne - personneDoisRemourser.Montant;
+                                    personneDoitEtreRembourser.Montant = personneDoitEtreRembourser.Montant - montantReceveur;
+                                    personneDoitRembourser.Montant = personneDoitRembourser.Montant + montantReceveur;
+                                    Console.WriteLine(participant.GetByID(personneDoitRembourser.IdParticipants).Prenom + " doit " + String.Format("{0:0.00}", montantReceveur) + " a " + participant.GetByID(personneDoitEtreRembourser.IdParticipants).Prenom);
+                                    montantReceveur = personneDoitEtreRembourser.Montant - montantMoyenneParPersonne;
+                                    montantDonneur = montantMoyenneParPersonne - personneDoitRembourser.Montant;
+                                }
+
                             }
 
                         }
@@ -111,16 +117,10 @@ namespace EMI_SoireeConsole
                     }
 
                 }
+            }
 
-            }
-            for (int i = 0; i < DoisEtreRembourser.Count; i++)
-            {
-                Console.WriteLine("partcipant" + DoisEtreRembourser[i].IdParticipants + " montant " + DoisEtreRembourser[i].Montant);
-            }
-            for (int i = 0; i < DoisRembourser.Count; i++)
-            {
-                Console.WriteLine("partcipant" + DoisRembourser[i].IdParticipants + " montant " + DoisRembourser[i].Montant);
-            }
+
+            
         }
 
         public static void AjoutPrix(int idSoiree, int idParticipant)
