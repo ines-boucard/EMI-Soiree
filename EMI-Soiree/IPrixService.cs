@@ -10,7 +10,7 @@ namespace EMI_Soiree
     {
         public List<Prix> GetAll();
         public List<Prix> GetByIdSoiree(int IdSoiree);
-        public Prix GetByIdParticipants(int IdParticipants);
+        public List<Prix> GetByIdParticipants(int IdParticipants);
         public Prix Insert(Prix p);
         
 
