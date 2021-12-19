@@ -12,10 +12,14 @@ namespace EMI_SoireeConsole
         public static void VoirParticipantsSoiree(int choixSoiree)
         {
             var participant = new ParticipantsService();
+            var depense = new PrixService();
             Console.WriteLine(participant.GetByIdSoiree(choixSoiree).Count());
             for (int i = 0; i < participant.GetByIdSoiree(choixSoiree).Count(); i++)
             {
-                Console.WriteLine("| " + participant.GetByIdSoiree(choixSoiree)[i].ID + "| " + participant.GetByIdSoiree(choixSoiree)[i].Nom + "  |   " + participant.GetByIdSoiree(choixSoiree)[i].Prenom);
+                Console.WriteLine("| " + participant.GetByIdSoiree(choixSoiree)[i].ID + 
+                    " | " + participant.GetByIdSoiree(choixSoiree)[i].Nom + 
+                    " | " + participant.GetByIdSoiree(choixSoiree)[i].Prenom + 
+                    " | " + String.Format("{0:0.00}",depense.GetByIdParticipants(participant.GetByIdSoiree(choixSoiree)[i].ID).Montant));
             }
             Console.WriteLine("\n Souhaitez vous : \n 1-modifier un participants " +
                 "                                  \n 2-supprimer un participant " +

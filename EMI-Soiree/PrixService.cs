@@ -36,7 +36,7 @@ namespace EMI_Soiree
         }
         public Prix GetByIdParticipants(int idParticipant)
         {
-            var p = depot.GetByID(idParticipant);
+            var p = depot.GetByIdParticipants(idParticipant);
 
             return new Prix(p.IdSoiree,
                             p.IdParticipants,

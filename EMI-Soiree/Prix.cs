@@ -8,11 +8,11 @@ namespace EMI_Soiree
 {
     public class Prix
     {
-        public int Montant { get; set; }
+        public double Montant { get; set; }
         public int IdParticipants { get; set; }
         public int IdSoiree { get; set; }
 
-        public Prix(int idSoiree, int idParticipants, int montant)
+        public Prix(int idSoiree, int idParticipants, double montant)
             => (IdSoiree, IdParticipants, Montant) = (idSoiree, idParticipants, montant);
     }
 }
