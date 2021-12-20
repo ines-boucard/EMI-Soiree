@@ -27,7 +27,7 @@ namespace EMI_Soiree.DAL
             while (reader.Read())
             {
 
-                var prix = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(3));
+                var prix = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(2));
 
 
                 listeDePrix.Add(prix);
@@ -95,7 +95,7 @@ namespace EMI_Soiree.DAL
             
             while(reader.Read())
             {
-                p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(2));
+                var p = new Prix_DAL(reader.GetInt32(0), reader.GetInt32(1), reader.GetDouble(2));
                 listeDePrix.Add(p);
 
             }
@@ -120,7 +120,6 @@ namespace EMI_Soiree.DAL
 
             commande.CommandText = "update prix set montant=@montant where idParticipants=@idParticipant and idSoiree=@idSoiree";
             commande.Parameters.Add(new SqlParameter("@idParticipant", prix.IdParticipants));
-
             commande.Parameters.Add(new SqlParameter("@idSoiree", prix.IdSoiree));
             commande.Parameters.Add(new SqlParameter("@montant", prix.Montant));
 
@@ -130,8 +129,6 @@ namespace EMI_Soiree.DAL
             {
                 throw new Exception($"Impossible de mettre à jour le prix correspondant a la soire {prix.IdSoiree} et au participant {prix.IdParticipants} ");
             }
-
-            prix.Montant = GetByIdParticipants(prix.IdParticipants).Montant;
 
             DetruireConnexionEtCommande();
 

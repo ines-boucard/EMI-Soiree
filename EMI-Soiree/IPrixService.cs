@@ -11,6 +11,7 @@ namespace EMI_Soiree
         public List<Prix> GetAll();
         public List<Prix> GetByIdSoiree(int IdSoiree);
         public List<Prix> GetByIdParticipants(int IdParticipants);
+        public Prix Update(Prix p);
         public Prix Insert(Prix p);
         
 

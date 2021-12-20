@@ -19,7 +19,7 @@ namespace EMI_SoireeConsole
                 Console.WriteLine("| " + participant.GetByIdSoiree(choixSoiree)[i].ID + 
                     " | " + participant.GetByIdSoiree(choixSoiree)[i].Nom + 
                     " | " + participant.GetByIdSoiree(choixSoiree)[i].Prenom + 
-                    " | " + String.Format("{0:0.00}",depense.GetByIdParticipants(participant.GetByIdSoiree(choixSoiree)[i].ID).Montant));
+                    " | " + String.Format("{0:0.00}",depense.GetByIdParticipants(participant.GetByIdSoiree(choixSoiree)[i].ID)[i].Montant));
             }
             Console.WriteLine("\n Souhaitez vous : \n 1-modifier un participants " +
                 "                                  \n 2-supprimer un participant " +
